@@ -76,7 +76,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
      * Displays the Post
      * @param post post
      */
-    public void bindPost(@Nullable Post post) {
+    public void bindPost(@Nullable Post post,boolean isGridMode) {
         currentPost = post;
 
         if(currentPost != null) {
@@ -86,12 +86,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             captionView.setText(currentPost.getCaption());
             datetimeLabel.setText(formatDatetime(itemView.getResources(), post.getTimestamp()));
 
+
+
             Picasso.get().load(currentPost.getImageUrl())
                     .placeholder(android.R.color.holo_blue_dark)
-                    .into(imageView);
-
-            Picasso.get().load(currentPost.getProfileImageUrl()).into(userIconView);
-        }
+                    .into(imageView);        }
         else {
             usernameView.setText("");
             locationView.setText("");
@@ -102,6 +101,21 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             imageView.setImageResource(android.R.color.white);
             userIconView.setImageResource(android.R.color.white);
         }
+        int visibility = isGridMode ? View.GONE : View.VISIBLE;
+            usernameView.setVisibility(visibility);
+            userIconView.setVisibility(visibility);
+            locationView.setVisibility(visibility);
+            menuIcon.setVisibility(visibility);
+
+            heartIcon.setVisibility(visibility);
+            commentIcon.setVisibility(visibility);
+            sendIcon.setVisibility(visibility);
+            bookmarkIcon.setVisibility(visibility);
+
+            captionView.setVisibility(visibility);
+            datetimeLabel.setVisibility(visibility);
+
+
 
     }
 

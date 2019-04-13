@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,9 +45,17 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-
+    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+    gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        @Override
+        public int getSpanSize(int position) {
+            return feedAdapter.getSpanSize(position);
+        }
+    });
         RecyclerView recyclerView = rootView.findViewById(R.id.fp_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+      //  recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        feedAdapter.setGridMode(true);
         recyclerView.setAdapter(feedAdapter);
 
         String username = "user-1";
@@ -54,7 +63,14 @@ public class ProfileFragment extends Fragment {
         DataSource.getInstance().fetchPosts(username, new DataSourceCallback<List<Post>>() {
             @Override
             public void onDataFetched(List<Post> posts) {
+
                 feedAdapter.setPosts(posts);
+            }
+        });
+        DataSource.getInstance().fetchProfile(username, new DataSourceCallback<Profile>() {
+            @Override
+            public void onDataFetched(Profile profile) {
+           feedAdapter.setProfile(profile);
             }
         });
 
